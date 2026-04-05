@@ -10,10 +10,12 @@ import com.ecommerce.security.jwt.RedisTokenBlacklistManager;
 import java.time.Duration;
 import java.util.Date;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
   private final UserRepository userRepository;
