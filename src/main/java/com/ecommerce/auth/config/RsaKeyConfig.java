@@ -1,5 +1,6 @@
 package com.ecommerce.auth.config;
 
+import com.ecommerce.auth.exception.RsaException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -16,7 +17,7 @@ public class RsaKeyConfig {
       generator.initialize(2048);
       return generator.generateKeyPair();
     } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException("Failed to generate RSA KeyPair", e);
+      throw new RsaException("Failed to generate RSA KeyPair", e);
     }
   }
 }
