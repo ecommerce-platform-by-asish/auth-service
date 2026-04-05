@@ -1,13 +1,10 @@
 spring:
   application:
     name: auth-service
-server:
-  servlet:
-    context-path: /api/auth
   datasource:
     url: jdbc:postgresql://localhost:5432/auth_db
-    username: postgres
-    password: password
+    username: ecommerce
+    password: admin
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -20,3 +17,11 @@ server:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
+
+server:
+  servlet:
+    context-path: /api/auth
+
+jwt:
+  secret-key: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+  expiration-ms: 86400000
