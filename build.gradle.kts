@@ -6,7 +6,7 @@ plugins {
     `maven-publish`
 }
 
-group = "com.ecommerce"
+group = "com.common"
 version = "0.0.1-SNAPSHOT"
 description = "auth-service"
 
@@ -28,13 +28,13 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
-    implementation("com.ecommerce:shared-common:1.0.0-SNAPSHOT")
-    implementation("com.ecommerce:shared-security:1.0.0-SNAPSHOT")
+    implementation("com.common:shared-common:1.0.0-SNAPSHOT")
+    implementation("com.common:shared-security:1.0.0-SNAPSHOT")
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.flywaydb:flyway-database-postgresql")
     runtimeOnly("org.postgresql:postgresql")
@@ -52,4 +52,18 @@ tasks.withType<Test> {
 
 tasks.named("check") {
     dependsOn("spotlessCheck")
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.addAll(listOf("-Xlint:all", "-Xlint:-serial", "-Xlint:-processing"))
+}
+
+val stopApp by tasks.registering(Exec::class) {
+    group = "application"
+    description = "Stops any running application processes for this service."
+    commandLine("sh", "-c", "ps aux | grep 'bootRun' | grep '${project.name}' | grep -v grep | awk '{print $2}' | xargs kill -9 || true")
+}
+
+tasks.named("build") {
+    dependsOn(stopApp)
 }

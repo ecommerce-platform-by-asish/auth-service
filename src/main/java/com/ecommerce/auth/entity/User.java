@@ -1,12 +1,13 @@
 package com.ecommerce.auth.entity;
 
-import com.ecommerce.common.jpa.BaseEntity;
-import com.ecommerce.security.user.Role;
+import com.common.persistence.BaseEntity;
+import com.security.user.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,6 +22,8 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
+
+  @Serial private static final long serialVersionUID = 1L;
 
   @Column(nullable = false, unique = true)
   private String email;

@@ -1,14 +1,17 @@
 package com.ecommerce.auth.controller;
 
+import com.common.web.dto.ApiResponse;
 import com.ecommerce.auth.dto.AuthResponse;
 import com.ecommerce.auth.dto.LoginRequest;
 import com.ecommerce.auth.service.AuthService;
-import com.ecommerce.common.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +24,16 @@ public class AuthController {
 
   @PostMapping("/login")
   public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
-    return ResponseEntity.status(org.springframework.http.HttpStatus.CREATED)
+    return ResponseEntity.status(HttpStatus.CREATED)
         .body(ApiResponse.ok(authService.login(request)));
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<ApiResponse<Void>> logout(
+      @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authHeader) {
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+      authService.logout(authHeader.substring(7));
+    }
+    return ResponseEntity.ok(ApiResponse.ok(null));
   }
 }
