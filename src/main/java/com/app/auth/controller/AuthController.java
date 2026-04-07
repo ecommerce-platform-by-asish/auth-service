@@ -1,9 +1,9 @@
-package com.ecommerce.auth.controller;
+package com.app.auth.controller;
 
-import com.common.web.dto.ApiResponse;
-import com.ecommerce.auth.dto.AuthResponse;
-import com.ecommerce.auth.dto.LoginRequest;
-import com.ecommerce.auth.service.AuthService;
+import com.app.auth.dto.AuthResponse;
+import com.app.auth.dto.LoginRequest;
+import com.app.auth.service.AuthService;
+import com.app.common.web.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

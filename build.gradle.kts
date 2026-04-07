@@ -6,7 +6,7 @@ plugins {
     `maven-publish`
 }
 
-group = "com.common"
+group = "com.app"
 version = "0.0.1-SNAPSHOT"
 description = "auth-service"
 
@@ -32,8 +32,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
-    implementation("com.common:shared-common:1.0.0-SNAPSHOT")
-    implementation("com.common:shared-security:1.0.0-SNAPSHOT")
+    implementation("com.app:shared-common:1.0.0-SNAPSHOT")
+    implementation("com.app:shared-security:1.0.0-SNAPSHOT")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.flywaydb:flyway-database-postgresql")

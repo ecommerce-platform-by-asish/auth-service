@@ -1,7 +1,7 @@
-package com.ecommerce.auth.exception;
+package com.app.auth.exception;
 
-import com.common.exception.BaseException;
-import com.common.exception.GlobalStatusCode;
+import com.app.common.exception.BaseException;
+import com.app.common.exception.GlobalStatusCode;
 import java.io.Serial;
 
 /**

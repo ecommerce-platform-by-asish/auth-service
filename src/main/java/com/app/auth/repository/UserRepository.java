@@ -1,6 +1,6 @@
-package com.ecommerce.auth.repository;
+package com.app.auth.repository;
 
-import com.ecommerce.auth.entity.User;
+import com.app.auth.entity.User;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.ecommerce.auth.dto;
+package com.app.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

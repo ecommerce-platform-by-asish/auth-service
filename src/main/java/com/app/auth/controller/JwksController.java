@@ -1,4 +1,4 @@
-package com.ecommerce.auth.controller;
+package com.app.auth.controller;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;

@@ -1,6 +1,6 @@
-package com.ecommerce.auth.config;
+package com.app.auth.config;
 
-import com.ecommerce.auth.exception.RsaException;
+import com.app.auth.exception.RsaException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
