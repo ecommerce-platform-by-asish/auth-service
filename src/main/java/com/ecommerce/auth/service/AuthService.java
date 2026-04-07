@@ -4,16 +4,20 @@ import com.ecommerce.auth.dto.AuthResponse;
 import com.ecommerce.auth.dto.LoginRequest;
 import com.ecommerce.auth.entity.User;
 import com.ecommerce.auth.repository.UserRepository;
-import com.ecommerce.security.exception.UnauthorizedException;
-import com.ecommerce.security.jwt.JwtProvider;
-import com.ecommerce.security.jwt.RedisTokenBlacklistManager;
+import com.security.exception.UnauthorizedException;
+import com.security.jwt.JwtProvider;
+import com.security.jwt.RedisTokenBlacklistManager;
 import java.time.Duration;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
   private final UserRepository userRepository;
@@ -21,18 +25,8 @@ public class AuthService {
   private final JwtProvider jwtProvider;
   private final RedisTokenBlacklistManager blacklistManager;
 
-  public AuthService(
-      UserRepository userRepository,
-      PasswordEncoder passwordEncoder,
-      JwtProvider jwtProvider,
-      RedisTokenBlacklistManager blacklistManager) {
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-    this.jwtProvider = jwtProvider;
-    this.blacklistManager = blacklistManager;
-  }
-
   public AuthResponse login(LoginRequest request) {
+    log.info("Login attempt for user: {}", request.getEmail());
     User user =
         userRepository.findByEmail(request.getEmail()).orElseThrow(UnauthorizedException::new);
 
@@ -41,7 +35,10 @@ public class AuthService {
     }
 
     Map<String, Object> claims =
-        Map.of("id", user.getId(), "email", user.getEmail(), "role", user.getRole().toString());
+        Map.of(
+            "id", user.getId().toString(),
+            "email", user.getEmail(),
+            "role", user.getRole().toString());
 
     String token = jwtProvider.generateToken(user.getEmail(), claims);
 
@@ -55,12 +52,12 @@ public class AuthService {
   public void logout(String token) {
     var claims = jwtProvider.extractClaims(token);
     String jti = claims.getId();
-    Date expiration = claims.getExpiration();
+    Instant expiration = claims.getExpiration() != null ? claims.getExpiration().toInstant() : null;
 
     if (jti != null && expiration != null && blacklistManager != null) {
-      long timeToLiveMs = expiration.getTime() - System.currentTimeMillis();
-      if (timeToLiveMs > 0) {
-        blacklistManager.blacklist(jti, Duration.ofMillis(timeToLiveMs));
+      Duration timeToLive = Duration.between(Instant.now(), expiration);
+      if (!timeToLive.isNegative()) {
+        blacklistManager.blacklist(jti, timeToLive);
       }
     }
   }

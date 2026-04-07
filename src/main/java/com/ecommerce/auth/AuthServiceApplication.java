@@ -1,12 +1,12 @@
 package com.ecommerce.auth;
 
-import com.ecommerce.common.boot.EcomBootApplication;
+import com.common.boot.BaseSpringBootApplication;
 import org.springframework.boot.SpringApplication;
 
-@EcomBootApplication
+@BaseSpringBootApplication
 public class AuthServiceApplication {
 
-  static void main(String[] args) {
+  public static void main(String[] args) {
     SpringApplication.run(AuthServiceApplication.class, args);
   }
 }
