@@ -64,6 +64,6 @@ val stopApp by tasks.registering(Exec::class) {
     commandLine("sh", "-c", "ps aux | grep 'bootRun' | grep '${project.name}' | grep -v grep | awk '{print $2}' | xargs kill -9 || true")
 }
 
-tasks.named("build") {
+tasks.named("bootRun") {
     dependsOn(stopApp)
 }
