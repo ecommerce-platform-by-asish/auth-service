@@ -1,12 +1,12 @@
-package com.ecommerce.auth.service;
+package com.app.auth.service;
 
-import com.ecommerce.auth.dto.AuthResponse;
-import com.ecommerce.auth.dto.LoginRequest;
-import com.ecommerce.auth.entity.User;
-import com.ecommerce.auth.repository.UserRepository;
-import com.security.exception.UnauthorizedException;
-import com.security.jwt.JwtProvider;
-import com.security.jwt.RedisTokenBlacklistManager;
+import com.app.auth.dto.AuthResponse;
+import com.app.auth.dto.LoginRequest;
+import com.app.auth.entity.User;
+import com.app.auth.repository.UserRepository;
+import com.app.security.exception.UnauthorizedException;
+import com.app.security.jwt.JwtProvider;
+import com.app.security.jwt.RedisTokenBlacklistManager;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;

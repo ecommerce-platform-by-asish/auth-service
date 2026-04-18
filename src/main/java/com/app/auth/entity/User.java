@@ -1,7 +1,7 @@
-package com.ecommerce.auth.entity;
+package com.app.auth.entity;
 
-import com.common.persistence.BaseEntity;
-import com.security.user.Role;
+import com.app.common.persistence.BaseEntity;
+import com.app.security.user.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

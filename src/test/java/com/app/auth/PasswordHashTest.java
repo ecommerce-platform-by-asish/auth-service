@@ -1,4 +1,4 @@
-package com.ecommerce.auth;
+package com.app.auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
