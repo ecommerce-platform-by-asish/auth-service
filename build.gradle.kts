@@ -1,69 +1,81 @@
 plugins {
+    id("org.graalvm.buildtools.native") version "1.1.0"
+
     java
-    id("org.springframework.boot") version "4.0.5"
-    id("io.spring.dependency-management") version "1.1.7"
-    id("com.diffplug.spotless") version "8.4.0"
-    `maven-publish`
+    alias(libs.plugins.spring.boot)
+    
+    alias(libs.plugins.spotless)
 }
 
 group = "com.app"
 version = "0.0.1-SNAPSHOT"
 description = "auth-service"
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
-    }
-}
-
-spotless {
-    java {
-        googleJavaFormat()
-    }
-}
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation(platform(libs.spring.boot.bom))
+
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.spring.boot.starter.data.redis)
+    implementation(libs.spring.boot.starter.flyway)
+    implementation(libs.flyway.database.postgresql)
+    runtimeOnly(libs.postgresql)
+    runtimeOnly(libs.micrometer.registry.prometheus)
 
     implementation("com.app:shared-common:1.0.0-SNAPSHOT")
     implementation("com.app:shared-security:1.0.0-SNAPSHOT")
-    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
-    implementation("org.springframework.boot:spring-boot-starter-flyway")
-    implementation("org.flywaydb:flyway-database-postgresql")
-    runtimeOnly("org.postgresql:postgresql")
 
-    compileOnly("org.projectlombok:lombok")
-    testCompileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation(libs.springdoc.openapi.webmvc)
+
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
+
+    testImplementation(libs.spring.boot.starter.test)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-
-tasks.named("check") {
-    dependsOn("spotlessCheck")
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
 }
 
-tasks.withType<JavaCompile> {
-    options.compilerArgs.addAll(listOf("-Xlint:all", "-Xlint:-serial", "-Xlint:-processing"))
+tasks.withType<JavaCompile>().configureEach {
+    options.isFork = true
+    options.forkOptions.jvmArgs = (options.forkOptions.jvmArgs ?: mutableListOf()).apply {
+        addAll(listOf(
+            "--add-opens", "jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
+            "--add-opens", "jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
+            "--add-opens", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+            "--add-opens", "jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
+            "--add-opens", "jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
+            "--add-opens", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+            "--add-opens", "jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
+            "--add-opens", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+            "--add-opens", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+        ))
+    }
+    options.compilerArgs.addAll(listOf(
+        "-Xlint:all", "-Xlint:-serial", "-Xlint:-processing", "-Xdoclint:none"
+    ))
 }
 
-val stopApp by tasks.registering(Exec::class) {
-    group = "application"
-    description = "Stops any running application processes for this service."
-    commandLine("sh", "-c", "ps aux | grep 'bootRun' | grep '${project.name}' | grep -v grep | awk '{print $2}' | xargs kill -9 || true")
+spotless {
+    java {
+        googleJavaFormat("1.27.0")
+    }
 }
 
-tasks.named("bootRun") {
-    dependsOn(stopApp)
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.bouncycastle" && requested.name.startsWith("bcprov")) {
+            useVersion("1.84")
+            because("Force upgrade to resolve CVE-2026-0636")
+        }
+    }
 }

@@ -3,7 +3,7 @@ package com.app.auth.controller;
 import com.app.auth.dto.AuthResponse;
 import com.app.auth.dto.LoginRequest;
 import com.app.auth.service.AuthService;
-import com.app.common.web.dto.ApiResponse;
+import com.app.common.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

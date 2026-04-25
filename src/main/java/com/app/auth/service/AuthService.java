@@ -5,11 +5,12 @@ import com.app.auth.dto.LoginRequest;
 import com.app.auth.entity.User;
 import com.app.auth.repository.UserRepository;
 import com.app.security.exception.UnauthorizedException;
-import com.app.security.jwt.JwtProvider;
-import com.app.security.jwt.RedisTokenBlacklistManager;
+import com.app.security.token.JwtProvider;
+import com.app.security.token.RedisTokenBlacklistManager;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,11 +27,10 @@ public class AuthService {
   private final RedisTokenBlacklistManager blacklistManager;
 
   public AuthResponse login(LoginRequest request) {
-    log.info("Login attempt for user: {}", request.getEmail());
-    User user =
-        userRepository.findByEmail(request.getEmail()).orElseThrow(UnauthorizedException::new);
+    log.info("Login attempt for user: {}", request.email());
+    User user = userRepository.findByEmail(request.email()).orElseThrow(UnauthorizedException::new);
 
-    if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+    if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
       throw new UnauthorizedException();
     }
 
@@ -42,23 +42,22 @@ public class AuthService {
 
     String token = jwtProvider.generateToken(user.getEmail(), claims);
 
-    return AuthResponse.builder()
-        .token(token)
-        .email(user.getEmail())
-        .role(user.getRole().toString())
-        .build();
+    return new AuthResponse(token, user.getEmail(), user.getRole().toString());
   }
 
   public void logout(String token) {
     var claims = jwtProvider.extractClaims(token);
-    String jti = claims.getId();
-    Instant expiration = claims.getExpiration() != null ? claims.getExpiration().toInstant() : null;
+    var expiration = Optional.ofNullable(claims.getExpiration()).map(java.util.Date::toInstant);
+    var jti = Optional.ofNullable(claims.getId());
 
-    if (jti != null && expiration != null && blacklistManager != null) {
-      Duration timeToLive = Duration.between(Instant.now(), expiration);
-      if (!timeToLive.isNegative()) {
-        blacklistManager.blacklist(jti, timeToLive);
-      }
-    }
+    jti.ifPresent(
+        id ->
+            expiration.ifPresent(
+                exp -> {
+                  var ttl = Duration.between(Instant.now(), exp);
+                  if (!ttl.isNegative()) {
+                    blacklistManager.blacklist(id, ttl);
+                  }
+                }));
   }
 }

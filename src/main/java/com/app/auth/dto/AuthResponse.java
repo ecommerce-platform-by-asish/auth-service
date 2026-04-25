@@ -1,17 +1,14 @@
 package com.app.auth.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public record AuthResponse(String token, String type, String email, String role) {
+  public AuthResponse {
+    if (type == null) {
+      type = "Bearer";
+    }
+  }
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class AuthResponse {
-  private String token;
-  @Builder.Default private String type = "Bearer";
-  private String email;
-  private String role;
+  // Convenience constructor to match common usage without explicit type
+  public AuthResponse(String token, String email, String role) {
+    this(token, "Bearer", email, role);
+  }
 }

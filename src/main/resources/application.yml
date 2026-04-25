@@ -1,4 +1,7 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
   application:
     name: auth-service
   data:
@@ -28,7 +31,7 @@ logging:
     org.hibernate.orm.jdbc.bind: trace
 
 server:
-  port: 8080
+  port: 8081
   servlet:
     context-path: /api/auth
 
