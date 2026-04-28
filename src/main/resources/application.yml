@@ -17,6 +17,18 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+app:
+  security:
+    public-paths:
+      - "/.well-known/**"
+      - "/login"
+      - "/register"
+      - "/logout"
+    rsa:
+      generate: true
+    jwt:
+      expiration-ms: 86400000
   datasource:
     url: jdbc:postgresql://localhost:5432/auth_db
     username: ecommerce

@@ -1,10 +1,11 @@
 [versions]
-springBoot = "4.0.5"
-springCloud = "2024.0.0"
+springBoot = "4.0.6"
+springCloud = "2025.1.1"
+springCloudGateway = "5.0.1"
 springDoc = "2.8.5"
 lombok = "1.18.36"
 mapstruct = "1.6.3"
-bouncycastle = "1.80"
+bouncycastle = "1.84"
 jjwt = "0.12.6"
 postgresql = "42.7.5"
 jackson = "2.18.2"
@@ -12,56 +13,59 @@ micrometer = "1.14.3"
 otel = "1.46.0"
 
 [libraries]
-sb-bom = { group = "org.springframework.boot", name = "spring-boot-dependencies", version.ref = "springBoot" }
-sc-bom = { group = "org.springframework.cloud", name = "spring-cloud-dependencies", version.ref = "springCloud" }
-jackson-bom = { group = "com.fasterxml.jackson", name = "jackson-bom", version.ref = "jackson" }
-jjwt-bom = { group = "io.jsonwebtoken", name = "jjwt-root", version.ref = "jjwt" }
+sb-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springBoot" }
+sc-bom = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloud" }
+jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
+jjwt-bom = { module = "io.jsonwebtoken:jjwt-root", version.ref = "jjwt" }
 
-sb-autoconfigure = { group = "org.springframework.boot", name = "spring-boot-autoconfigure" }
-sb-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
-sb-starter-webflux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
-sb-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
-sb-starter-data-redis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis" }
-sb-starter-data-redis-reactive = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis-reactive" }
-sb-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
-sb-starter-oauth2-resource-server = { group = "org.springframework.boot", name = "spring-boot-starter-oauth2-resource-server" }
-sb-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
-sb-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
-sb-starter-json = { group = "org.springframework.boot", name = "spring-boot-starter-json" }
-sb-docker-compose = { group = "org.springframework.boot", name = "spring-boot-docker-compose" }
-sb-devtools = { group = "org.springframework.boot", name = "spring-boot-devtools" }
+sb-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure", version.ref = "springBoot" }
+sb-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBoot" }
+sb-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "springBoot" }
+sb-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springBoot" }
+sb-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "springBoot" }
+sb-starter-data-redis-reactive = { module = "org.springframework.boot:spring-boot-starter-data-redis-reactive", version.ref = "springBoot" }
+sb-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "springBoot" }
+sb-starter-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "springBoot" }
+sb-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "springBoot" }
+sb-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "springBoot" }
+sb-starter-json = { module = "org.springframework.boot:spring-boot-starter-json", version.ref = "springBoot" }
+sb-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose", version.ref = "springBoot" }
+sb-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "springBoot" }
+sb-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway", version.ref = "springBoot" }
+sb-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "" }
 
-sc-starter-gateway = { group = "org.springframework.cloud", name = "spring-cloud-starter-gateway" }
+sc-starter-gateway = { module = "org.springframework.cloud:spring-cloud-starter-gateway-server-webflux", version.ref = "springCloudGateway" }
 
-postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
-flyway-core = { group = "org.flywaydb", name = "flyway-core" }
-flyway-database-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+flyway-core = { module = "org.flywaydb:flyway-core", version = "" }
+flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version = "" }
 
-springdoc-openapi-webmvc = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springDoc" }
-springdoc-openapi-webflux-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webflux-ui", version.ref = "springDoc" }
+springdoc-openapi-webmvc = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springDoc" }
+springdoc-openapi-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springDoc" }
 
-lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
-mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
-mapstruct-processor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapstruct" }
-jackson-annotations = { group = "com.fasterxml.jackson.core", name = "jackson-annotations" }
-jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 
-bouncycastle-bcprov = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.ref = "bouncycastle" }
-jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api" }
-jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl" }
-jjwt-jackson = { group = "io.jsonwebtoken", name = "jjwt-jackson" }
+bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
 
-micrometer-tracing-bridge-otel = { group = "io.micrometer", name = "micrometer-tracing-bridge-otel" }
-otel-exporter-otlp = { group = "io.opentelemetry", name = "opentelemetry-exporter-otlp" }
+micrometer-tracing-bridge-otel = { module = "io.micrometer:micrometer-tracing-bridge-otel", version = "" }
+otel-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp", version = "" }
 
 [bundles]
 springweb = ["sb-starter-web", "sb-starter-validation"]
-databasejpa = ["sb-starter-data-jpa", "postgresql", "flyway-core", "flyway-database-postgresql"]
+databasejpa = ["sb-starter-data-jpa", "postgresql", "sb-starter-flyway", "flyway-database-postgresql"]
 lombok = ["lombok"]
 lombokmapstruct = ["lombok", "mapstruct", "mapstruct-processor"]
 tracing = ["micrometer-tracing-bridge-otel", "otel-exporter-otlp"]
+testbundle = ["sb-starter-test", "junit-platform-launcher"]
 
 [plugins]
 springboot = { id = "org.springframework.boot", version.ref = "springBoot" }
-spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.7" }
 spotless = { id = "com.diffplug.spotless", version = "7.0.2" }

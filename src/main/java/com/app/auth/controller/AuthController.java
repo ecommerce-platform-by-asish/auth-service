@@ -6,12 +6,12 @@ import com.app.auth.service.AuthService;
 import com.app.common.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,10 +29,9 @@ public class AuthController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<ApiResponse<Void>> logout(
-      @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authHeader) {
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
-      authService.logout(authHeader.substring(7));
+  public ResponseEntity<ApiResponse<Void>> logout(@AuthenticationPrincipal Jwt jwt) {
+    if (jwt != null) {
+      authService.logout(jwt);
     }
     return ResponseEntity.ok(ApiResponse.ok(null));
   }
