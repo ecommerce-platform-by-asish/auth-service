@@ -2,9 +2,11 @@ package com.app.auth.service;
 
 import com.app.auth.dto.AuthResponse;
 import com.app.auth.dto.LoginRequest;
+import com.app.auth.dto.RegisterRequest;
 import com.app.auth.entity.User;
 import com.app.auth.repository.UserRepository;
 import com.app.security.exception.UnauthorizedException;
+import com.app.security.model.Role;
 import com.app.security.token.JwtProvider;
 import com.app.security.token.RedisTokenBlacklistManager;
 import java.time.Duration;
@@ -16,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,21 @@ public class AuthService {
   private final PasswordEncoder passwordEncoder;
   private final JwtProvider jwtProvider;
   private final RedisTokenBlacklistManager blacklistManager;
+
+  @Transactional
+  public void register(RegisterRequest request) {
+    log.info("Registering user: {}", request.email());
+    if (userRepository.findByEmail(request.email()).isPresent()) {
+      throw new RuntimeException("Email already exists");
+    }
+
+    User user = new User();
+    user.setEmail(request.email());
+    user.setPasswordHash(passwordEncoder.encode(request.password()));
+    user.setRole(Role.USER);
+
+    userRepository.save(user);
+  }
 
   public AuthResponse login(LoginRequest request) {
     log.info("Login attempt for user: {}", request.email());
