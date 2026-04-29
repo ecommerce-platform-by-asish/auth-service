@@ -2,7 +2,7 @@
 springBoot = "4.0.6"
 springCloud = "2025.1.1"
 springCloudGateway = "5.0.1"
-springDoc = "2.8.5"
+springDoc = "3.0.3"
 lombok = "1.18.36"
 mapstruct = "1.6.3"
 bouncycastle = "1.84"
@@ -32,6 +32,7 @@ sb-starter-json = { module = "org.springframework.boot:spring-boot-starter-json"
 sb-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose", version.ref = "springBoot" }
 sb-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "springBoot" }
 sb-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway", version.ref = "springBoot" }
+sb-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "springBoot" }
 sb-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot" }
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "" }
 

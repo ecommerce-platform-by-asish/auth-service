@@ -10,6 +10,7 @@ import com.app.security.token.RedisTokenBlacklistManager;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,14 +48,12 @@ public class AuthService {
 
   public void logout(Jwt jwt) {
     log.info("Logout requested for token: {}", jwt.getId());
-    var expiration = jwt.getExpiresAt();
-    var jti = jwt.getId();
-
-    if (jti != null && expiration != null) {
-      var ttl = Duration.between(Instant.now(), expiration);
-      if (!ttl.isNegative()) {
-        blacklistManager.blacklist(jti, ttl);
-      }
-    }
+    Optional.ofNullable(jwt.getId())
+        .ifPresent(
+            jti ->
+                Optional.ofNullable(jwt.getExpiresAt())
+                    .map(exp -> Duration.between(Instant.now(), exp))
+                    .filter(ttl -> !ttl.isNegative())
+                    .ifPresent(ttl -> blacklistManager.blacklist(jti, ttl)));
   }
 }

@@ -1,12 +1,13 @@
 package com.app.auth.controller;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import com.app.auth.dto.AuthResponse;
 import com.app.auth.dto.LoginRequest;
 import com.app.auth.service.AuthService;
 import com.app.common.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -24,8 +25,7 @@ public class AuthController {
 
   @PostMapping("/login")
   public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
-    return ResponseEntity.status(HttpStatus.CREATED)
-        .body(ApiResponse.ok(authService.login(request)));
+    return ApiResponse.ok(authService.login(request)).toEntity(CREATED);
   }
 
   @PostMapping("/logout")
@@ -33,6 +33,6 @@ public class AuthController {
     if (jwt != null) {
       authService.logout(jwt);
     }
-    return ResponseEntity.ok(ApiResponse.ok(null));
+    return ApiResponse.<Void>ok(null).toEntity();
   }
 }
