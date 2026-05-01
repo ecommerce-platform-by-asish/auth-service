@@ -3,13 +3,6 @@ server:
   servlet:
     context-path: /api/auth
 
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-    enabled: true
-  swagger-ui:
-    enabled: false
-  use-management-port: false
 
 spring:
   application:
@@ -35,12 +28,7 @@ spring:
       connection-timeout: 3000
   flyway:
     enabled: true
-  mvc:
-    servlet:
-      load-on-startup: 1
-  jpa:
-    defer-datasource-initialization: false
-    open-in-view: false
+
     hibernate:
       ddl-auto: update
     properties:
