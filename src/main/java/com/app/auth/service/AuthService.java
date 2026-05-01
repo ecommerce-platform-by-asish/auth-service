@@ -37,12 +37,12 @@ public class AuthService {
       throw new RuntimeException("Email already exists");
     }
 
-    User user = new User();
-    user.setEmail(request.email());
-    user.setPasswordHash(passwordEncoder.encode(request.password()));
-    user.setRole(Role.USER);
-
-    userRepository.save(user);
+    userRepository.save(
+        User.builder()
+            .email(request.email())
+            .passwordHash(passwordEncoder.encode(request.password()))
+            .role(Role.USER)
+            .build());
   }
 
   public AuthResponse login(LoginRequest request) {
