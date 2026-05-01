@@ -20,9 +20,9 @@ dependencies {
 
     implementation("com.app:shared-common:1.0.0-SNAPSHOT")
     implementation("com.app:shared-security:1.0.0-SNAPSHOT")
-    
+
     implementation(libs.springdoc.openapi.webmvc)
-    
+
     developmentOnly(platform(libs.sb.bom))
     developmentOnly(libs.sb.docker.compose)
     developmentOnly(libs.sb.devtools)
@@ -54,7 +54,11 @@ spotless {
 tasks.bootBuildImage { environment.put("BP_JVM_CDS_ENABLED", "true") }
 
 
-tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> { systemProperties(System.getProperties().map { it.key.toString() to it.value }.toMap()) }
+tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
+    systemProperties(
+        System.getProperties().map { it.key.toString() to it.value }.toMap()
+    )
+}
 
 tasks.register<Exec>("stopApp") {
     group = "application"
@@ -62,6 +66,4 @@ tasks.register<Exec>("stopApp") {
     commandLine("sh", "-c", "lsof -t -i:8081 | xargs kill -9 || true")
 }
 
-tasks.clean {
-    mustRunAfter("spotlessApply")
-}
+
